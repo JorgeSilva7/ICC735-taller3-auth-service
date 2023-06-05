@@ -1,9 +1,13 @@
 import axios from "axios";
 import environment from "../config/environment.js";
+import registerMessages from "../messages/register.messages.js";
+import { HTTPError } from "../helpers/error.helper.js";
 
 const {
 	REGISTRO_CIVIL_API: { BASE_URL, APIKEY },
 } = environment;
+
+const { criminalRecords } = registerMessages;
 
 const axiosInstance = axios.create({
 	baseURL: BASE_URL,
@@ -15,16 +19,25 @@ const axiosInstance = axios.create({
 });
 
 /**
- * TODO: Send request to the real endpoint
- * Missing endpoint information (contract, documentation, etc) so:
- * Only returns false when the RUT is 55.555.555-5 (any format)
- * PLEASE CHANGE THIS FOR THE CORRECT IMPLEMENTATION OF THE API BEFORE MERGING INTO MASTER
+ * Get criminal records from Registro Civil API
  * @param {string} rut - User RUT
+ * @returns {Promise<object>}
+ *  	object.rut - User RUT
+ * 		object.fullName - User full name
+ * 		object.quantity - User's criminal records quantity (number)
  */
 async function getCriminalRecords(rut) {
-	//return axiosInstance.get("????").then((response) => true);
-	const fakeResponse = rut !== "555555555";
-	return Promise.resolve(fakeResponse);
+	return axiosInstance
+		.get(`/person/${rut}/criminal_records`)
+		.then((response) => response.data)
+		.catch((error) => {
+			const { status, data } = error.response;
+			throw new HTTPError({
+				name: criminalRecords.apiError.name,
+				msg: criminalRecords.apiError.message(data ?? "unexpected error"),
+				code: status,
+			});
+		});
 }
 
-export { getCriminalRecords };
+export { getCriminalRecords, axiosInstance };

@@ -2,7 +2,7 @@ import axios from "axios";
 import environment from "../config/environment.js";
 
 const {
-	EMAIL_SERVICE: { BASE_URL, ENDPOINTS },
+	NOTIFICATIONS_SERVICE: { BASE_URL, ENDPOINTS },
 } = environment;
 
 const axiosInstance = axios.create({ baseURL: BASE_URL });
@@ -13,7 +13,7 @@ const axiosInstance = axios.create({ baseURL: BASE_URL });
  * @param {string} args.subject - Email subject
  * @param {string} args.body - Email Body in HTML or plain text
  * @returns {Promise<boolean>} true if the request return a successful code
- * @throws {Error} Any error from email service when the request return a error code (4xx, 5xx)
+ * @throws {Error} Any error from notifications service when the request return a error code (4xx, 5xx)
  */
 function sendEmail({ to, subject, body }) {
 	return axiosInstance

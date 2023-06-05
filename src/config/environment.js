@@ -13,15 +13,16 @@ export default {
 	},
 	NODE_ENV,
 	JWT: {
-		SECRET: process.env.PORT || "secret",
+		SECRET: process.env.SECRET || "secret",
 		DEFAULT_EXPIRES: "1d",
 	},
 	HOST: process.env.HOST || "http://localhost",
 	PORT: process.env.PORT || 3001,
 	MONGO_URI:
 		process.env.MONGO_URI || "mongodb://localhost:27017/auth-service-local",
-	EMAIL_SERVICE: {
-		BASE_URL: process.env.EMAIL_SERVICE_BASE_URL || "http://localhost:3002",
+	NOTIFICATIONS_SERVICE: {
+		BASE_URL:
+			process.env.NOTIFICATIONS_SERVICE_BASE_URL || "http://localhost:3002",
 		ENDPOINTS: {
 			SEND_EMAIL: "/send-email",
 			SEND_PUSH: "/send-push",

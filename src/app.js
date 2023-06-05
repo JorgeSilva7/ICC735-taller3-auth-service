@@ -1,14 +1,11 @@
 import express from "express";
-import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
 import cors from "cors";
 
 import { connectDB } from "./config/mongo.js";
-import SWAGGER_OPTIONS from "./config/swagger.js";
 import environment from "./config/environment.js";
 import routes from "./routes.js";
 
-const { PORT, HOST } = environment;
+const { PORT, HOST, NODE_ENV } = environment;
 
 // Express configuration
 const app = express();
@@ -23,18 +20,18 @@ app.get("/", function (req, res) {
 		.send({ details: "Taller 3: Auth Service", author: "JSilva" });
 });
 
-// Swagger configuration
-app.use(
-	"/docs",
-	swaggerUi.serve,
-	swaggerUi.setup(swaggerJsdoc(SWAGGER_OPTIONS))
-);
+function loadMocks() {
+	if (["development", "local"].includes(NODE_ENV)) {
+		import("./mocks");
+	}
+}
 
 async function startApp() {
+	loadMocks();
 	await connectDB().then(() => {
 		console.log("Connected to mongo successfully");
 		app.listen(PORT, () =>
-			console.log(`Express API server running on ${HOST}:${PORT}`)
+			console.log(`Auth service running on ${HOST}:${PORT}`)
 		);
 	});
 }

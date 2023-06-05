@@ -9,7 +9,7 @@ import { generateToken } from "../helpers/jwt.helper.js";
 import { getCriminalRecords } from "../services/registro-civil.service.js";
 
 const {
-	EMAIL_SERVICE: {
+	NOTIFICATIONS_SERVICE: {
 		SUBJECTS: { VALIDATE },
 	},
 	NODE_ENV,
@@ -63,28 +63,28 @@ async function checkIfUserAlreadyExists({ email, rut }) {
  * @returns {string} JWT
  */
 function generateCodeToken() {
-	const valiationCode = randomize(
+	const validationCode = randomize(
 		randomizeConfig.pattern,
 		randomizeConfig.length
 	);
 
 	const codeToken = generateToken({
-		data: { code: valiationCode },
+		data: { code: validationCode },
 		expiresIn: "15m",
 	});
 
-	return codeToken;
+	return { codeToken, validationCode };
 }
 
 /**
- * TODO: Get correct (real) endpoint response from 'getCriminalRecords'
- * and process the returned data into boolean variable
+ * Get quantity of criminal records belonging to the rut
+ * if the quantity is not null (over 0) throw a userNotAllowed error
  * @param {string} rut - User RUT
- * @returns {boolean} true if the user doesn't has criminal records
+ * @returns {boolean} true if the user doesn't has criminal records (quantity)
  */
 async function checkIfRUTisAllowed(rut) {
-	const response = await getCriminalRecords(rut);
-	if (!response) {
+	const { quantity } = await getCriminalRecords(rut);
+	if (quantity) {
 		const { userNotAllowed } = registerMessages;
 
 		throw new HTTPError({
@@ -93,13 +93,12 @@ async function checkIfRUTisAllowed(rut) {
 			code: 403,
 		});
 	}
-	return response;
 }
 
 /**
  * Create a new user and save in database
  * @param {User} user - User arguments
- * @returns {string} id of the created user
+ * @returns {Promise<string>} id of the created user
  */
 async function register(user) {
 	const { rut } = user;
@@ -107,7 +106,7 @@ async function register(user) {
 	await checkIfRUTisAllowed(rut);
 	await checkIfUserAlreadyExists(user);
 
-	const codeToken = generateCodeToken();
+	const { codeToken, validationCode } = generateCodeToken();
 
 	const userInstance = new UserModel({ ...user, code: codeToken });
 
@@ -118,7 +117,7 @@ async function register(user) {
 		await sendEmail({
 			to: savedUser.email,
 			subject: VALIDATE,
-			body: validateEmail(user),
+			body: validateEmail({ name: savedUser.name, code: validationCode }),
 		}).catch(async (err) => {
 			await savedUser.remove();
 			throw err;

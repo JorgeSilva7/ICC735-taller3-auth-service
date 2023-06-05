@@ -27,4 +27,10 @@ export default {
 		name: `${action}_user_not_allowed_error`,
 		message: "this user is not allowed to register in this platform",
 	},
+	criminalRecords: {
+		apiError: {
+			name: `${action}_api_error`,
+			message: (message) => message,
+		},
+	},
 };

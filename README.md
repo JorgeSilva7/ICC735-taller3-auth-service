@@ -5,7 +5,7 @@
 - Register: ✅ (only on local environment)
 - Login: ✅
 - Verify Email: ✅
-- Get User: 🔜
+- Get User: ✅
 
 ## Initialize and run local
 
@@ -24,8 +24,6 @@ Set the environment variables in env/.local.env file:
 npm i
 npm run local
 ```
-
-## API Documentation in Swagger: /docs
 
 ## Tests and coverage
 
