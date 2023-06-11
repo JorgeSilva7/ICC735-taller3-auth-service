@@ -51,7 +51,7 @@ describe("register", () => {
 		expect(result).toBe(savedUser._id);
 	});
 
-	it("[ERROR] Should throw an error when the user already exists", async () => {
+	it("[ERROR] Should throw an error when the user already exists with same email", async () => {
 		const user = {
 			rut: "123456789",
 			email: "existinguser@example.com",
@@ -59,6 +59,24 @@ describe("register", () => {
 
 		const foundUser = {
 			email: "existinguser@example.com",
+		};
+
+		UserModel.findOne.mockReturnValue({
+			exec: jest.fn().mockResolvedValue(foundUser),
+		});
+		getCriminalRecords.mockResolvedValue(getCriminalRecordsBehaviour.able);
+		
+		await expect(register(user)).rejects.toThrow(HTTPError);
+	});
+
+	it("[ERROR] Should throw an error when the user already exists with same rut", async () => {
+		const user = {
+			rut: "123456789",
+			email: "existinguser@example.com",
+		};
+
+		const foundUser = {
+			rut: "123456789",
 		};
 
 		UserModel.findOne.mockReturnValue({

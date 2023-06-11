@@ -11,17 +11,6 @@ jest.mock("../../src/models/user.model.js", () => ({
 
 const verifyTokenStub = jest.spyOn(JWTHelpers, "verifyToken");
 
-jest.mock("../../src/helpers/error.helper.js", () => {
-	return {
-		HTTPError: class MockHTTPError extends Error {
-			constructor(errorObj) {
-				super();
-				Object.assign(this, errorObj);
-			}
-		},
-	};
-});
-
 describe("verify", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -38,7 +27,7 @@ describe("verify", () => {
 			expect(error instanceof HTTPError).toBe(true);
 			expect(error.name).toBe("verify_user_not_found_error");
 			expect(error.msg).toBe("user not found");
-			expect(error.code).toBe(404);
+			expect(error.statusCode).toBe(404);
 			expect(UserModel.findById).toHaveBeenCalledWith("123");
 			expect(UserModel.select).toHaveBeenCalledWith("+code");
 			expect(UserModel.exec).toHaveBeenCalled();
@@ -51,24 +40,14 @@ describe("verify", () => {
 		};
 		UserModel.exec.mockResolvedValue(foundUser);
 
-		class MockHTTPError extends HTTPError {
-			constructor(errorObj) {
-				super();
-				Object.assign(this, errorObj);
-			}
-		}
-
-		const mockHTTPError = new MockHTTPError({
-			name: "verify_already_verified_error",
-			msg: "the user is already verified",
-			code: 400,
-		});
-
 		try {
 			await verify({ userId: "123", code: "abc" });
 			fail("Expected HTTPError to be thrown");
 		} catch (error) {
-			expect(error).toEqual(mockHTTPError);
+			expect(error instanceof HTTPError).toBe(true);
+			expect(error.name).toBe("verify_already_verified_error");
+			expect(error.msg).toBe("the user is already verified");
+			expect(error.statusCode).toBe(400);
 			expect(UserModel.findById).toHaveBeenCalledWith("123");
 			expect(UserModel.select).toHaveBeenCalledWith("+code");
 			expect(UserModel.exec).toHaveBeenCalled();
@@ -88,7 +67,7 @@ describe("verify", () => {
 			expect(error instanceof HTTPError).toBe(true);
 			expect(error.name).toBe("verify_code_not_found_error");
 			expect(error.msg).toBe("code not found. Please contact support");
-			expect(error.code).toBe(404);
+			expect(error.statusCode).toBe(404);
 			expect(UserModel.findById).toHaveBeenCalledWith("123");
 			expect(UserModel.select).toHaveBeenCalledWith("+code");
 			expect(UserModel.exec).toHaveBeenCalled();
@@ -109,7 +88,7 @@ describe("verify", () => {
 		} catch (error) {
 			expect(error.name).toBe("verify_invalid_code_error");
 			expect(error.msg).toBe("the code are invalid");
-			expect(error.code).toBe(400);
+			expect(error.statusCode).toBe(400);
 			expect(UserModel.findById).toHaveBeenCalledWith("123");
 			expect(UserModel.select).toHaveBeenCalledWith("+code");
 			expect(UserModel.exec).toHaveBeenCalled();
