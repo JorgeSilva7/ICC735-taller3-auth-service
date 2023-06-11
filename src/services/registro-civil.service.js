@@ -12,9 +12,7 @@ const { criminalRecords } = registerMessages;
 const axiosInstance = axios.create({
 	baseURL: BASE_URL,
 	headers: {
-		headers: {
-			apikey: APIKEY,
-		},
+		apikey: APIKEY,
 	},
 });
 

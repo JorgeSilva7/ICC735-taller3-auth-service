@@ -31,12 +31,4 @@ function returnErrorResponse(error, res) {
 	return res.status(500).json({ error: error.toString() });
 }
 
-/**
- * Check if the error is a business error (4xx)
- * @param {Error} error - Error to check
- * @returns {boolean}
- */
-const isBusinessError = (error) =>
-	error.statusCode && String(error.statusCode).startsWith("4");
-
-export { HTTPError, returnErrorResponse, isBusinessError };
+export { HTTPError, returnErrorResponse };

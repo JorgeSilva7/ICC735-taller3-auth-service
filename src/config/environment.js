@@ -34,7 +34,7 @@ export default {
 		},
 	},
 	REGISTRO_CIVIL_API: {
-		BASE_URL: process.env.REGISTRO_CIVIL_API_BASE_URL || "",
-		APIKEY: process.env.REGISTRO_CIVIL_API_BASE_URL || "",
+		BASE_URL: process.env.REGISTRO_CIVIL_API_BASE_URL,
+		APIKEY: process.env.REGISTRO_CIVIL_API_APIKEY || "1234",
 	},
 };
