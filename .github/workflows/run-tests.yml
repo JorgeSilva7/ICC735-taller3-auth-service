@@ -19,12 +19,12 @@ jobs:
         run: sudo docker run -d -p 27017:27017 mongo:latest
       - run: npm install
       - run: npm run build --if-present
+      - run: npm test
 
   test:
     uses: ./.github/workflows/run-tests.yml
-    - run: npm test
 
   coverage:
     needs: test
-    uses: ./.github/workflows/run-tests.yml
-    - run: npm coverage
+    steps:
+      - run: npm coverage
