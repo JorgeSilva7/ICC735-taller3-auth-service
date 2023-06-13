@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: JorgeSilva7/ICC735-taller3-auth-service/.github/workflows/run-tests.yml
+      - uses: ./.github/workflows/run-tests.yml
       - run: npm test
   coverage:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: JorgeSilva7/ICC735-taller3-auth-service/.github/workflows/run-tests.yml
+      - uses: ./.github/workflows/run-tests.yml
       - run: npm coverage
