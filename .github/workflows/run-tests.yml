@@ -22,12 +22,9 @@ jobs:
 
   test:
     uses: ./.github/workflows/run-tests.yml
+    - run: npm test
 
-    steps:
-      - run: npm test
   coverage:
     needs: test
     uses: ./.github/workflows/run-tests.yml
-
-    steps:
-      - run: npm coverage
+    - run: npm coverage
