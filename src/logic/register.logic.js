@@ -8,12 +8,14 @@ import validateEmail from "../emails/validate.email.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { getCriminalRecords } from "../services/registro-civil.service.js";
 
+const VALIDATION_DEV_DEFAULT = "asd123";
+
 const {
 	NOTIFICATIONS_SERVICE: {
 		SUBJECTS: { VALIDATE },
 	},
 	NODE_ENV,
-	ENVS: { local },
+	ENVS: { local, dev },
 } = environment;
 
 const randomizeConfig = {
@@ -63,13 +65,13 @@ async function checkIfUserAlreadyExists({ email, rut }) {
  * @returns {string} JWT
  */
 function generateCodeToken() {
-	const validationCode = randomize(
-		randomizeConfig.pattern,
-		randomizeConfig.length
-	);
+	let validationCode = null;
+	if (NODE_ENV !== dev) {
+		validationCode = randomize(randomizeConfig.pattern, randomizeConfig.length);
+	}
 
 	const codeToken = generateToken({
-		data: { code: validationCode },
+		data: { code: validationCode || VALIDATION_DEV_DEFAULT },
 		expiresIn: "15m",
 	});
 
