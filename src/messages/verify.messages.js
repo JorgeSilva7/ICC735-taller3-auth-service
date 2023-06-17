@@ -23,7 +23,7 @@ export default {
 	},
 	invalidCode: {
 		name: `${action}_invalid_code_error`,
-		message: "the code are invalid",
+		message: "the code is not valid",
 	},
 	alreadyVerified: {
 		name: `${action}_already_verified_error`,
