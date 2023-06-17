@@ -7,6 +7,7 @@ import environment from "../config/environment.js";
 import validateEmail from "../emails/validate.email.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { getCriminalRecords } from "../services/registro-civil.service.js";
+import { faker } from "@faker-js/faker";
 
 const VALIDATION_DEV_DEFAULT = "asd123";
 
@@ -110,7 +111,11 @@ async function register(user) {
 
 	const { codeToken, validationCode } = generateCodeToken();
 
-	const userInstance = new UserModel({ ...user, code: codeToken });
+	const userInstance = new UserModel({
+		...user,
+		code: codeToken,
+		photo: faker.image.avatar(),
+	});
 
 	const savedUser = await userInstance.save();
 

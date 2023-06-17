@@ -15,6 +15,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@faker-js/faker": "^8.0.2",
 		"axios": "^1.4.0",
 		"axios-mock-adapter": "^1.21.4",
 		"bcrypt": "^5.1.0",

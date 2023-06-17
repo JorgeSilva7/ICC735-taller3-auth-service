@@ -40,6 +40,7 @@ const userSchema = new Schema(
 			required: true,
 			default: false,
 		},
+		photo: String,
 	},
 	{ timestamps: true }
 );
