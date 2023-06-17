@@ -92,9 +92,18 @@ function setVerified() {
 	return this.save();
 }
 
+/**
+ * Set user.blocked = true or false depending of the last status
+ */
+function changeBlockStatus() {
+	this.blocked = !this.blocked;
+	return this.save();
+}
+
 userSchema.methods = {
 	comparePassword,
 	setVerified,
+	changeBlockStatus,
 };
 
 const UserModel = mongoose.model("User", userSchema);
