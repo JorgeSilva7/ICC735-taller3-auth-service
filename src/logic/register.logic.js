@@ -65,13 +65,13 @@ async function checkIfUserAlreadyExists({ email, rut }) {
  * @returns {string} JWT
  */
 function generateCodeToken() {
-	let validationCode = null;
+	let validationCode = VALIDATION_DEV_DEFAULT;
 	if (NODE_ENV !== dev) {
 		validationCode = randomize(randomizeConfig.pattern, randomizeConfig.length);
 	}
 
 	const codeToken = generateToken({
-		data: { code: validationCode || VALIDATION_DEV_DEFAULT },
+		data: { code: validationCode },
 		expiresIn: "15m",
 	});
 
