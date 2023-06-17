@@ -20,6 +20,6 @@ export default {
 	},
 	blocked: {
 		name: `${action}_blocked_error`,
-		message: "this user are blocked",
+		message: "this user is blocked",
 	},
 };
