@@ -2,6 +2,12 @@ import UserModel from "../models/user.model.js";
 import { HTTPError } from "../helpers/error.helper.js";
 import loginMessages from "../messages/login.messages.js";
 import { generateToken } from "../helpers/jwt.helper.js";
+import environment from "../config/environment.js";
+
+const {
+	NODE_ENV,
+	ENVS: { dev },
+} = environment;
 
 /**
  * Check if the user is blocked
@@ -52,7 +58,9 @@ async function login({ email, password }) {
 		});
 	}
 
-	checkIfUserBlocked(foundUser);
+	if (NODE_ENV !== dev) {
+		checkIfUserBlocked(foundUser);
+	}
 
 	const { _id, verified } = foundUser;
 
