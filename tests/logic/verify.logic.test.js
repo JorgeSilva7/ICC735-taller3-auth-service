@@ -108,7 +108,7 @@ describe("verify", () => {
 			fail("Expected HTTPError to be thrown");
 		} catch (error) {
 			expect(error.name).toBe("verify_invalid_code_error");
-			expect(error.msg).toBe("the code are invalid");
+			expect(error.msg).toBe("the code is not valid");
 			expect(error.code).toBe(400);
 			expect(UserModel.findById).toHaveBeenCalledWith("123");
 			expect(UserModel.select).toHaveBeenCalledWith("+code");
