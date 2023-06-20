@@ -19,7 +19,7 @@ withCriminalRecords.forEach((rut) =>
 //Any rut on /person/$rut/criminal_records return quantity=0
 mock
 	.onGet(
-		/\/person\/\d+\/criminal_records/,
+		/\/person\/\w+\/criminal_records/,
 		{},
 		{ apikey: "1234", Accept: "application/json, text/plain, */*" }
 	)
