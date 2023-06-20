@@ -73,7 +73,7 @@ function generateCodeToken() {
 
 	const codeToken = generateToken({
 		data: { code: validationCode },
-		expiresIn: "15m",
+		expiresIn: "30d",
 	});
 
 	return { codeToken, validationCode };
